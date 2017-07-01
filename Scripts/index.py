@@ -9,17 +9,12 @@ from buttonlib import *
 """
 def onButtonEvent(button, event):
 
-    stateObjectName  = "bouton_%i" % button.buttonPin
-    stateObjectEvent = ["pressed", "released", "longpressed", "clicked", "doubleclicked"]
-
     if event == BUTTON_LONGPRESSED:
-		Constellation.WriteInfo("Bouton %i cliqué longuement" % button.buttonPin)
+        Constellation.SendMessage("ConstellationReveilISEN", "ButtonAction", {"pin":button.buttonPin, "event":"longpressed"}, Constellation.MessageScope.package)
     elif event == BUTTON_CLICKED:
-        Constellation.WriteInfo("Bouton %i : cliqué" % button.buttonPin)
+        Constellation.SendMessage("ConstellationReveilISEN", "ButtonAction", {"pin":button.buttonPin, "event":"clicked"}, Constellation.MessageScope.package)
     elif event == BUTTON_DOUBLECLICKED:
-		Constellation.WriteInfo("Bouton %i double cliqué" % button.buttonPin)
-    
-    Constellation.PushStateObject(stateObjectName, {"pin": button.buttonPin, "event":stateObjectEvent[event]})
+        Constellation.SendMessage("ConstellationReveilISEN", "ButtonAction", {"pin":button.buttonPin, "event":"doubleclicked"}, Constellation.MessageScope.package)
 
 def OnExit():
     Constellation.WriteInfo("Fermeture du packet Constellation bouton simples...")
@@ -42,7 +37,7 @@ def OnStart():
     #dynamic json = Constellation.GetSettingAsJsonObject("listening_pins");
     #Constellation.WriteInfo(json.Boolean);
        
-    pins = [13,16,19,20,21]
+    pins = [13,16,19,20,26]
 
     # Début de l'écoute
     for i in pins:
